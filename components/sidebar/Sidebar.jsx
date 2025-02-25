@@ -28,12 +28,8 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col h-full bg-card border-r">
-      <div className="flex items-center gap-2 px-6 py-4">
-        <Music className="h-8 w-8" />
-        <h1 className="text-2xl font-bold">Musix</h1>
-      </div>
-      <div className="flex flex-col gap-2 px-4 py-2">
+    <div className="flex flex-col h-full bg-card">
+      <div className="flex flex-col gap-2 p-4">
         {routes.map((route) => (
           <Link key={route.href} href={route.href}>
             <Button
