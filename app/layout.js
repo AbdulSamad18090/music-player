@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col h-screen">
+          <div className="flex flex-col h-dvh">
             <Header />
             <ResizablePanelGroup
               direction="horizontal"
