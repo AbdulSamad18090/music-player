@@ -1,5 +1,13 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import Header from "@/components/header/Header";
+import Player from "@/components/player/Player";
+import { Sidebar } from "@/components/sidebar/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +30,20 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="flex flex-col h-screen">
+          <Header />
+          <ResizablePanelGroup
+            direction="horizontal"
+            className="flex-1 border-y"
+          >
+            <ResizablePanel defaultSize={20} minSize={5} maxSize={20}>
+              <Sidebar />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={80}>{children}</ResizablePanel>
+          </ResizablePanelGroup>
+          <Player />
+        </div>
       </body>
     </html>
   );
