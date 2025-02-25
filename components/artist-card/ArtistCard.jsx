@@ -5,13 +5,13 @@ import Link from "next/link";
 export function ArtistCard({ artist }) {
   return (
     <Link href={`/artists/${artist.id}`}>
-      <Card className="overflow-hidden flex flex-col items-center justify-center w-fit hover:opacity-75 transition rounded-t-full rounded-b-lg shadow-none border-none text-center">
+      <Card className="overflow-hidden flex flex-col items-center justify-center w-fit hover:opacity-75 transition text-center border-none shadow-none">
         <CardContent className="p-0">
           <div className="aspect-square relative">
             <img
               src={artist.image}
               alt={artist.name}
-              className="object-cover w-48 h-48 rounded-full"
+              className="object-cover w-full h-full rounded-full"
             />
           </div>
           <div className="p-4">

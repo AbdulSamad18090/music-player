@@ -8,7 +8,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { PlaylistCard } from "../playlist-card/PlaylistCard";
 import { ArtistCard } from "../artist-card/ArtistCard";
 
 export default function ArtistsCrousel({ artists }) {
@@ -19,9 +18,9 @@ export default function ArtistsCrousel({ artists }) {
           {artists.map((artist, index) => (
             <CarouselItem
               key={index}
-              className="pl-1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 p-1"
+              className="pl-1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 px-4"
             >
-              <ArtistCard artist={artist}/>
+              <ArtistCard artist={artist} />
             </CarouselItem>
           ))}
         </CarouselContent>

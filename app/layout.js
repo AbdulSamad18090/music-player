@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
               direction="horizontal"
               className="flex-1 border-y"
             >
-              <ResizablePanel defaultSize={20} minSize={5} maxSize={20}>
+              <ResizablePanel defaultSize={20} minSize={5.5} maxSize={20}>
                 <Sidebar />
               </ResizablePanel>
               <ResizableHandle withHandle />

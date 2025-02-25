@@ -35,7 +35,7 @@ export function Sidebar() {
             <Button
               variant="ghost"
               className={cn(
-                "w-full justify-start gap-2",
+                "w-full justify-start gap-3 px-3",
                 pathname === route.href && "bg-accent"
               )}
             >
