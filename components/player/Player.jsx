@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, ChevronUp } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 
@@ -36,8 +36,11 @@ const Player = () => {
             <h3 className="font-semibold text-foreground truncate">
               Song Name
             </h3>
-            <p className="text-sm text-muted-foreground truncate">
+            <p className="text-xs text-muted-foreground truncate">
               Artist Name
+            </p>
+            <p className="text-sm text-primary truncate flex items-center gap-1 cursor-pointer">
+              Up Next <ChevronUp />
             </p>
           </div>
         </div>

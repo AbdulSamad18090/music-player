@@ -1,6 +1,12 @@
 "use client";
 
-import { Music, ListMusic, Users, Home } from "lucide-react";
+import {
+  Music,
+  ListMusic,
+  Users,
+  Home,
+  GalleryHorizontalEnd,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
@@ -14,6 +20,11 @@ const routes = [
     href: "/",
   },
   {
+    label: "Songs",
+    icon: Music,
+    href: "/songs",
+  },
+  {
     label: "Playlists",
     icon: ListMusic,
     href: "/playlists",
@@ -22,6 +33,11 @@ const routes = [
     label: "Artists",
     icon: Users,
     href: "/artists",
+  },
+  {
+    label: "Albums",
+    icon: GalleryHorizontalEnd,
+    href: "/albums",
   },
 ];
 
@@ -46,7 +62,7 @@ export function Sidebar() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-card">
+    <div className="flex flex-col h-full bg-card w-full overflow-auto scrollbar-hidden">
       <div className="flex flex-row sm:flex-col gap-2 sm:p-4">
         {routes.map((route) => (
           <Link key={route.href} href={route.href}>

@@ -7,44 +7,14 @@ import { SongList } from "../song-list/SongList";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { fetchArtists, fetchPlaylists } from "@/lib/utils";
-export const ARTISTS = [
-  {
-    id: "artist1",
-    name: "Cosmo Sheldrake",
-    image:
-      "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=800&auto=format&fit=crop",
-    genres: ["Electronic", "Experimental"],
-  },
-  {
-    id: "artist2",
-    name: "Sleepy Forest",
-    image:
-      "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop",
-    genres: ["Ambient", "Nature"],
-  },
-  {
-    id: "artist3",
-    name: "The Digital Age",
-    image:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop",
-    genres: ["Electronic", "Chill"],
-  },
-  {
-    id: "artist2",
-    name: "Sleepy Forest",
-    image:
-      "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop",
-    genres: ["Ambient", "Nature"],
-  },
-  {
-    id: "artist3",
-    name: "The Digital Age",
-    image:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop",
-    genres: ["Electronic", "Chill"],
-  },
-];
+import {
+  fetchAlbums,
+  fetchArtists,
+  fetchPlaylists,
+  fetchSongs,
+} from "@/lib/utils";
+import Loader from "../loader/Loader";
+import AlbumsList from "../albums-list/AlbumsList";
 
 export const SONGS = [
   {
@@ -88,29 +58,69 @@ export const SONGS = [
 const HomePage = () => {
   const [playlists, setPlaylists] = useState([]);
   const [artists, setArtits] = useState([]);
+  const [songs, setSongs] = useState([]);
+  const [albums, setAlbums] = useState([]);
+  const [isLoadingPlaylists, setIsLoadingPlaylists] = useState(false);
+  const [isLoadingArtists, setIsLoadingArtists] = useState(false);
+  const [isLoadingSongs, setIsLoadingSongs] = useState(false);
+  const [isLoadingAlbums, setIsLoadingAlbums] = useState(false);
 
   const handleFetchPlaylists = async ({ query, limit }) => {
-    console.log(query, limit);
+    setIsLoadingPlaylists(true);
     const playlists = await fetchPlaylists({ query, limit });
     setPlaylists(playlists);
+    setIsLoadingPlaylists(false);
   };
   const handleFetchArtists = async ({ query, limit }) => {
-    console.log(query, limit);
+    setIsLoadingArtists(true);
     const artists = await fetchArtists({ query, limit });
     setArtits(artists);
+    setIsLoadingArtists(false);
+  };
+
+  const handleFetchSongs = async ({ query, limit }) => {
+    setIsLoadingSongs(true);
+    const songs = await fetchSongs({ query, limit });
+    setSongs(songs);
+    setIsLoadingSongs(false);
+  };
+  const handleFetchAlbums = async ({ query, limit }) => {
+    setIsLoadingAlbums(true);
+    const albums = await fetchAlbums({ query, limit });
+    setAlbums(albums);
+    setIsLoadingAlbums(false);
   };
 
   useEffect(() => {
     handleFetchPlaylists({ query: "2024", limit: 15 });
     handleFetchArtists({ query: "a", limit: 15 });
+    handleFetchSongs({ query: "a", limit: 6 });
+    handleFetchAlbums({ query: "a", limit: 16 });
   }, []);
 
-  console.log(artists);
+  console.log(albums)
 
   return (
     <div className="flex flex-col gap-4 p-6 h-full overflow-y-auto">
+      <h1 className="text-2xl font-bold">Songs</h1>
+      {isLoadingSongs ? <Loader /> : <SongList songs={songs} grid={true} />}
+      <div className="w-full flex items-center justify-center">
+        <Link href={"/songs"}>
+          <Button
+            variant=""
+            className="w-fit border border-border group transition-all"
+          >
+            Explore Songs{" "}
+            <ArrowRight className="group-hover:translate-x-1 transition-all" />
+          </Button>
+        </Link>
+      </div>
       <h1 className="text-2xl font-bold">Featured Playlists</h1>
-      <PlaylistCrousel playlists={playlists} />
+      {isLoadingPlaylists ? (
+        <Loader />
+      ) : (
+        <PlaylistCrousel playlists={playlists} />
+      )}
       <div className="w-full flex items-center justify-center">
         <Link href={"/playlists"}>
           <Button
@@ -123,7 +133,7 @@ const HomePage = () => {
         </Link>
       </div>
       <h1 className="text-2xl font-bold">Popular Artists</h1>
-      <ArtistsCrousel artists={artists} />
+      {isLoadingArtists ? <Loader /> : <ArtistsCrousel artists={artists} />}
       <div className="w-full flex items-center justify-center">
         <Link href={"/artists"}>
           <Button
@@ -135,8 +145,19 @@ const HomePage = () => {
           </Button>
         </Link>
       </div>
-      <h1 className="text-2xl font-bold">Recently Played</h1>
-      <SongList songs={SONGS} />
+      <h1 className="text-2xl font-bold">Popular Albums</h1>
+      {isLoadingAlbums ? <Loader /> : <AlbumsList albums={albums}/>}
+      <div className="w-full flex items-center justify-center">
+        <Link href={"/artists"}>
+          <Button
+            variant=""
+            className="w-fit border border-border group transition-all"
+          >
+            Explore Artists{" "}
+            <ArrowRight className="group-hover:translate-x-1 transition-all" />
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

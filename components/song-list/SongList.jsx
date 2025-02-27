@@ -2,7 +2,7 @@
 import { Play, Pause } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function SongList({ songs }) {
+export function SongList({ songs = [], grid = false }) {
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -10,16 +10,20 @@ export function SongList({ songs }) {
   };
 
   return (
-    <div className="space-y-2">
+    <div
+      className={`${
+        grid ? "grid grid-cols-1 md:grid-cols-2" : "flex flex-col"
+      } gap-4`}
+    >
       {songs.map((song) => (
         <div
           key={song.id}
-          className="flex items-center justify-between p-4 rounded-md hover:bg-muted/50 transition-colors"
+          className="flex items-center justify-between p-4 group rounded-md hover:bg-muted/50 transition-colors"
         >
           <div className="flex items-center gap-4">
-            <div className="relative group">
+            <div className="relative">
               <img
-                src={song.cover}
+                src={song.image[song.image.length - 1].url}
                 alt={song.title}
                 className="w-16 h-16 rounded-md object-cover"
               />
@@ -36,8 +40,10 @@ export function SongList({ songs }) {
               </Button>
             </div>
             <div>
-              <p className="font-medium">{song.title}</p>
-              <p className="text-sm text-muted-foreground">{song.artist}</p>
+              <p className="font-medium">{song.name}</p>
+              <p className="text-sm text-muted-foreground space-x-2">
+                {song.artists.primary.map((artist) => artist.name).join(", ")}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-4">
