@@ -17,46 +17,6 @@ const PlaylistCrousel = lazy(() => import("../playlist-crousel/PlaylistCrousel")
 const ArtistsCrousel = lazy(() => import("../artists-crousel/ArtistsCrousel").then((module) => ({ default: module.default || module.ArtistsCrousel })));
 const AlbumsList = lazy(() => import("../albums-list/AlbumsList").then((module) => ({ default: module.default || module.AlbumsList })));
 
-
-export const SONGS = [
-  {
-    id: "1",
-    title: "Lost in the City Lights",
-    artist: "Cosmo Sheldrake",
-    artistId: "artist1",
-    album: "Urban Dreams",
-    duration: 241,
-    cover:
-      "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=800&auto=format&fit=crop",
-    url: "https://storage.googleapis.com/joshwcomeau/lost-in-the-city-lights.mp3",
-    genre: "Electronic",
-  },
-  {
-    id: "2",
-    title: "Forest Lullaby",
-    artist: "Sleepy Forest",
-    artistId: "artist2",
-    album: "Nature Sounds",
-    duration: 184,
-    cover:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=800&auto=format&fit=crop",
-    url: "https://storage.googleapis.com/joshwcomeau/forest-lullaby.mp3",
-    genre: "Ambient",
-  },
-  {
-    id: "3",
-    title: "Electronic Chill",
-    artist: "The Digital Age",
-    artistId: "artist3",
-    album: "Digital Dreams",
-    duration: 198,
-    cover:
-      "https://images.unsplash.com/photo-1544731612-de7f96afe55f?q=80&w=800&auto=format&fit=crop",
-    url: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
-    genre: "Electronic",
-  },
-];
-
 const HomePage = () => {
   const [playlists, setPlaylists] = useState([]);
   const [artists, setArtists] = useState([]);

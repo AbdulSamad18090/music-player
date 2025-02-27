@@ -27,6 +27,8 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ScrollArea } from "../ui/scroll-area";
+import { fetchSongLyrics } from "@/lib/utils";
+import Loader from "../loader/Loader";
 
 const Player = () => {
   const dispatch = useDispatch();
@@ -36,6 +38,15 @@ const Player = () => {
   const audioRef = useRef(null);
   const animationRef = useRef(null);
   const [localProgress, setLocalProgress] = useState(progress);
+  const [isLoadingLyrics, setIsLoadingLyrics] = useState(false);
+  const [lyrics, setLyrics] = useState(null);
+
+  const handleFetchLyrics = async ({ id, limit }) => {
+    setIsLoadingLyrics(true);
+    const lyrics = await fetchSongLyrics({ id, limit });
+    setLyrics(lyrics);
+    setIsLoadingLyrics(false);
+  };
 
   // Initialize audio element
   useEffect(() => {
@@ -205,9 +216,14 @@ const Player = () => {
                 .join(", ") || "Artist Name"}
             </p>
             <Drawer>
-              <DrawerTrigger asChild>
+              <DrawerTrigger
+                asChild
+                onClick={() =>
+                  handleFetchLyrics({ id: currentSong?.id, limit: 10 })
+                }
+              >
                 <p className="text-sm text-primary truncate flex items-center gap-1 cursor-pointer">
-                  Up Next <ChevronUp />
+                  See Lyrics <ChevronUp />
                 </p>
               </DrawerTrigger>
               <DrawerContent>
@@ -230,12 +246,23 @@ const Player = () => {
                           ?.map((artist) => artist.name)
                           .join(", ") || "Artist Name"}
                       </p>
-                      <p className="text-sm text-primary truncate flex items-center cursor-pointer">Suggestions & Recomendations</p>
+                      <p className="text-sm text-primary truncate flex items-center cursor-pointer">
+                        Lyrics
+                      </p>
                     </div>
                   </div>
                 </DrawerHeader>
-                <ScrollArea className="h-96 w-full rounded-md border">
-
+                <ScrollArea className="h-96 w-full border-t">
+                  {isLoadingLyrics ? (
+                    <Loader />
+                  ) : (
+                    <div className="flex justify-center text-center p-6">
+                      <div
+                        className="max-w-lg"
+                        dangerouslySetInnerHTML={{ __html: lyrics }}
+                      />
+                    </div>
+                  )}
                 </ScrollArea>
               </DrawerContent>
             </Drawer>
