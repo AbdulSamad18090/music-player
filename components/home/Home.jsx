@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { PlaylistCard } from "../playlist-card/PlaylistCard";
 import PlaylistCrousel from "../playlist-crousel/PlaylistCrousel";
 import ArtistsCrousel from "../artists-crousel/ArtistsCrousel";
@@ -6,6 +7,7 @@ import { SongList } from "../song-list/SongList";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { fetchArtists, fetchPlaylists } from "@/lib/utils";
 export const ARTISTS = [
   {
     id: "artist1",
@@ -83,62 +85,32 @@ export const SONGS = [
   },
 ];
 
-export const PLAYLISTS = [
-  {
-    id: "playlist1",
-    name: "Chill Electronic",
-    description: "Perfect for focused work and relaxation",
-    cover:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop",
-    songs: SONGS.filter((song) => song.genre === "Electronic"),
-  },
-  {
-    id: "playlist2",
-    name: "Nature Sounds",
-    description: "Peaceful ambient sounds from nature",
-    cover:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=800&auto=format&fit=crop",
-    songs: SONGS.filter((song) => song.genre === "Ambient"),
-  },
-  {
-    id: "playlist1",
-    name: "Chill Electronic",
-    description: "Perfect for focused work and relaxation",
-    cover:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop",
-    songs: SONGS.filter((song) => song.genre === "Electronic"),
-  },
-  {
-    id: "playlist2",
-    name: "Nature Sounds",
-    description: "Peaceful ambient sounds from nature",
-    cover:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=800&auto=format&fit=crop",
-    songs: SONGS.filter((song) => song.genre === "Ambient"),
-  },
-  {
-    id: "playlist1",
-    name: "Chill Electronic",
-    description: "Perfect for focused work and relaxation",
-    cover:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop",
-    songs: SONGS.filter((song) => song.genre === "Electronic"),
-  },
-  {
-    id: "playlist2",
-    name: "Nature Sounds",
-    description: "Peaceful ambient sounds from nature",
-    cover:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=800&auto=format&fit=crop",
-    songs: SONGS.filter((song) => song.genre === "Ambient"),
-  },
-];
-
 const HomePage = () => {
+  const [playlists, setPlaylists] = useState([]);
+  const [artists, setArtits] = useState([]);
+
+  const handleFetchPlaylists = async ({ query, limit }) => {
+    console.log(query, limit);
+    const playlists = await fetchPlaylists({ query, limit });
+    setPlaylists(playlists);
+  };
+  const handleFetchArtists = async ({ query, limit }) => {
+    console.log(query, limit);
+    const artists = await fetchArtists({ query, limit });
+    setArtits(artists);
+  };
+
+  useEffect(() => {
+    handleFetchPlaylists({ query: "2024", limit: 15 });
+    handleFetchArtists({ query: "a", limit: 15 });
+  }, []);
+
+  console.log(artists);
+
   return (
     <div className="flex flex-col gap-4 p-6 h-full overflow-y-auto">
       <h1 className="text-2xl font-bold">Featured Playlists</h1>
-      <PlaylistCrousel playlists={PLAYLISTS} />
+      <PlaylistCrousel playlists={playlists} />
       <div className="w-full flex items-center justify-center">
         <Link href={"/playlists"}>
           <Button
@@ -151,7 +123,7 @@ const HomePage = () => {
         </Link>
       </div>
       <h1 className="text-2xl font-bold">Popular Artists</h1>
-      <ArtistsCrousel artists={ARTISTS} />
+      <ArtistsCrousel artists={artists} />
       <div className="w-full flex items-center justify-center">
         <Link href={"/artists"}>
           <Button

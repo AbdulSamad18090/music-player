@@ -9,16 +9,13 @@ export function ArtistCard({ artist }) {
         <CardContent className="p-0">
           <div className="aspect-square relative">
             <img
-              src={artist.image}
+              src={artist.image[artist.image.length - 1].url}
               alt={artist.name}
               className="object-cover w-full h-full rounded-full"
             />
           </div>
           <div className="p-4">
             <h3 className="font-semibold truncate">{artist.name}</h3>
-            <p className="text-sm text-muted-foreground">
-              {artist.genres.join(", ")}
-            </p>
           </div>
         </CardContent>
       </Card>

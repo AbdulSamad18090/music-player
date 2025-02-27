@@ -9,7 +9,7 @@ export function PlaylistCard({ playlist }) {
         <CardContent className="p-0">
           <div className="aspect-square relative">
             <img
-              src={playlist.cover}
+              src={playlist.image[playlist.image.length - 1].url}
               alt={playlist.name}
               className="object-cover w-full h-full"
             />
@@ -17,7 +17,7 @@ export function PlaylistCard({ playlist }) {
           <div className="p-4">
             <h3 className="font-semibold truncate">{playlist.name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">
-              {playlist.description}
+              {playlist.songCount} songs
             </p>
           </div>
         </CardContent>
