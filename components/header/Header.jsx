@@ -14,7 +14,7 @@ const Header = () => {
       {/* Left Side: Logo */}
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-2">
-          <Music className="h-8 w-8" />
+          <Music className="h-8 w-8 text-primary" />
           <h1 className="text-2xl font-bold">Musix</h1>
         </div>
 

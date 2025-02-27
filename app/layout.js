@@ -24,10 +24,6 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Music App",
   description: "A responsive music application",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#020817" },
-  ],
 };
 
 
