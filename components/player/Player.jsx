@@ -16,6 +16,17 @@ import {
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { ScrollArea } from "../ui/scroll-area";
 
 const Player = () => {
   const dispatch = useDispatch();
@@ -193,9 +204,41 @@ const Player = () => {
                 ?.map((artist) => artist.name)
                 .join(", ") || "Artist Name"}
             </p>
-            <p className="text-sm text-primary truncate flex items-center gap-1 cursor-pointer">
-              Up Next <ChevronUp />
-            </p>
+            <Drawer>
+              <DrawerTrigger asChild>
+                <p className="text-sm text-primary truncate flex items-center gap-1 cursor-pointer">
+                  Up Next <ChevronUp />
+                </p>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <div className="flex gap-3">
+                    <img
+                      src={
+                        currentSong?.image[currentSong.image.length - 1]?.url ||
+                        "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=800&auto=format&fit=crop"
+                      }
+                      alt="Album cover"
+                      className="h-14 w-14 rounded-md"
+                    />
+                    <div className="truncate text-left">
+                      <h3 className="font-semibold text-foreground truncate">
+                        {currentSong?.name || "No Song Playing"}
+                      </h3>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {currentSong?.artists?.primary
+                          ?.map((artist) => artist.name)
+                          .join(", ") || "Artist Name"}
+                      </p>
+                      <p className="text-sm text-primary truncate flex items-center cursor-pointer">Suggestions & Recomendations</p>
+                    </div>
+                  </div>
+                </DrawerHeader>
+                <ScrollArea className="h-96 w-full rounded-md border">
+
+                </ScrollArea>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
 
