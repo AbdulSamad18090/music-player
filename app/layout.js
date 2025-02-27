@@ -10,7 +10,6 @@ import Player from "@/components/player/Player";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import StoreProvider from "@/components/store-provider/StoreProvider";
-import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,23 +24,16 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Music App",
   description: "A responsive music application",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#020817" },
+  ],
 };
+
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        <meta
-          name="theme-color"
-          content="#ffffff"
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          name="theme-color"
-          content="#020817"
-          media="(prefers-color-scheme: dark)"
-        />
-      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
