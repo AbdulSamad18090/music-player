@@ -161,12 +161,12 @@ const HomePage = () => {
         {isLoadingAlbums ? <Loader /> : <AlbumsList albums={albums} />}
       </Suspense>
       <div className="w-full flex items-center justify-center">
-        <Link href={"/artists"}>
+        <Link href={"/albums"}>
           <Button
             variant=""
             className="w-fit border border-border group transition-all"
           >
-            Explore Artists{" "}
+            Explore Albums{" "}
             <ArrowRight className="group-hover:translate-x-1 transition-all" />
           </Button>
         </Link>

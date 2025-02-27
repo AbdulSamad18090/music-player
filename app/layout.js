@@ -9,6 +9,7 @@ import Header from "@/components/header/Header";
 import Player from "@/components/player/Player";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
+import StoreProvider from "@/components/store-provider/StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,41 +32,43 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex flex-col h-dvh">
-            <Header />
-            <ResizablePanelGroup
-              direction="horizontal"
-              className="flex-1 border-y"
-            >
-              <ResizablePanel
-                defaultSize={20}
-                minSize={0}
-                maxSize={20}
-                className="hidden sm:block"
+        <StoreProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex flex-col h-dvh">
+              <Header />
+              <ResizablePanelGroup
+                direction="horizontal"
+                className="flex-1 border-y"
               >
-                <Sidebar />
-              </ResizablePanel>
-              <ResizableHandle withHandle className="hidden sm:flex" />
-              <ResizablePanel defaultSize={80} minSize={0}>
-                <div className="h-full overflow-y-auto">
-                  <div className="block sm:hidden">
-                    <div className="w-full py-2 px-4 bg-card border-b">
-                      <Sidebar />
+                <ResizablePanel
+                  defaultSize={20}
+                  minSize={0}
+                  maxSize={20}
+                  className="hidden sm:block"
+                >
+                  <Sidebar />
+                </ResizablePanel>
+                <ResizableHandle withHandle className="hidden sm:flex" />
+                <ResizablePanel defaultSize={80} minSize={0}>
+                  <div className="h-full overflow-y-auto">
+                    <div className="block sm:hidden">
+                      <div className="w-full py-2 px-4 bg-card border-b">
+                        <Sidebar />
+                      </div>
                     </div>
+                    {children}
                   </div>
-                  {children}
-                </div>
-              </ResizablePanel>
-            </ResizablePanelGroup>
-            <Player />
-          </div>
-        </ThemeProvider>
+                </ResizablePanel>
+              </ResizablePanelGroup>
+              <Player />
+            </div>
+          </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
   );

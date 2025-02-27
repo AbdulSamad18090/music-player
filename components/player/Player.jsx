@@ -1,26 +1,175 @@
 "use client";
-
-import { useState } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2, ChevronUp } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  togglePlayPause,
+  setVolume,
+  setProgress,
+} from "@/lib/slices/playerSlice";
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  ChevronUp,
+} from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 
 const Player = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(50);
-  const [progress, setProgress] = useState(30); // Simulated progress
+  const dispatch = useDispatch();
+  const { currentSong, isPlaying, volume, progress } = useSelector(
+    (state) => state.player
+  );
+  const audioRef = useRef(null);
+  const animationRef = useRef(null);
+  const [localProgress, setLocalProgress] = useState(progress);
 
-  const togglePlay = () => setIsPlaying(!isPlaying);
+  // Initialize audio element
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    if (currentSong && currentSong.downloadUrl) {
+      const audioUrl =
+        currentSong.downloadUrl.find((url) => url.quality === "320kbps")?.url ||
+        currentSong.downloadUrl[currentSong.downloadUrl.length - 1]?.url;
+
+      if (audioUrl) {
+        audioRef.current.src = audioUrl;
+        audioRef.current.load();
+        if (isPlaying) {
+          audioRef.current
+            .play()
+            .catch((err) => console.error("Playback failed:", err));
+        }
+      }
+    }
+  }, [currentSong]);
+
+  // Handle play/pause
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current
+        .play()
+        .catch((err) => console.error("Playback failed:", err));
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+
+  // Handle volume changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+
+  // Function to update progress smoothly
+  const updateProgress = () => {
+    if (!audioRef.current) return;
+
+    const duration = audioRef.current.duration;
+    if (!isNaN(duration)) {
+      const calculatedProgress =
+        (audioRef.current.currentTime / duration) * 100;
+      setLocalProgress(calculatedProgress);
+
+      // Update Redux only when there's a significant change (reducing unnecessary re-renders)
+      if (Math.abs(calculatedProgress - progress) > 0.5) {
+        dispatch(setProgress(calculatedProgress));
+      }
+    }
+
+    animationRef.current = requestAnimationFrame(updateProgress);
+  };
+
+  // Start progress animation when song is playing
+  useEffect(() => {
+    if (isPlaying) {
+      animationRef.current = requestAnimationFrame(updateProgress);
+    } else {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    }
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [isPlaying]);
+
+  // Sync local progress with Redux when seeking
+  const handleProgressChange = (value) => {
+    if (!audioRef.current) return;
+
+    const duration = audioRef.current.duration;
+    if (!isNaN(duration)) {
+      audioRef.current.currentTime = (value[0] / 100) * duration;
+    }
+
+    setLocalProgress(value[0]);
+    dispatch(setProgress(value[0]));
+  };
+
+  // Handle song ending
+  const handleSongEnd = () => {
+    dispatch(setProgress(0));
+    dispatch(togglePlayPause());
+  };
+
+  // Save state in sessionStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(
+        "playerState",
+        JSON.stringify({ currentSong, isPlaying, volume, progress })
+      );
+    }
+  }, [currentSong, isPlaying, volume, progress]);
+
+  // Load the stored progress when the song starts playing
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    if (currentSong && currentSong.downloadUrl) {
+      const audioUrl =
+        currentSong.downloadUrl.find((url) => url.quality === "320kbps")?.url ||
+        currentSong.downloadUrl[currentSong.downloadUrl.length - 1]?.url;
+
+      if (audioUrl) {
+        audioRef.current.src = audioUrl;
+        audioRef.current.load();
+
+        // Restore progress time after loading
+        audioRef.current.onloadedmetadata = () => {
+          if (!isNaN(audioRef.current.duration)) {
+            audioRef.current.currentTime =
+              (progress / 100) * audioRef.current.duration;
+          }
+        };
+
+        if (isPlaying) {
+          audioRef.current
+            .play()
+            .catch((err) => console.error("Playback failed:", err));
+        }
+      }
+    }
+  }, [currentSong]);
 
   return (
     <div className="relative w-full bg-background p-3 border-t flex flex-col">
-      {/* Progress Bar (Above the Player) */}
+      {/* Audio Element */}
+      <audio ref={audioRef} onEnded={handleSongEnd} />
+
+      {/* Progress Bar */}
       <Slider
         className="absolute -top-[1px] left-0 w-full h-[2px] rounded-none"
-        value={[progress]}
-        onValueChange={(value) => setProgress(value[0])}
+        value={[localProgress]}
+        onValueChange={handleProgressChange}
         max={100}
-        step={1}
+        step={0.1} // Make it more precise
       />
 
       {/* Player Content */}
@@ -28,16 +177,21 @@ const Player = () => {
         {/* Left: Song Info */}
         <div className="flex items-center gap-4 min-w-0 flex-1">
           <img
-            src="https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=800&auto=format&fit=crop"
+            src={
+              currentSong?.image[currentSong.image.length - 1]?.url ||
+              "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=800&auto=format&fit=crop"
+            }
             alt="Album cover"
             className="h-14 w-14 rounded-md"
           />
           <div className="truncate">
             <h3 className="font-semibold text-foreground truncate">
-              Song Name
+              {currentSong?.name || "No Song Playing"}
             </h3>
             <p className="text-xs text-muted-foreground truncate">
-              Artist Name
+              {currentSong?.artists?.primary
+                ?.map((artist) => artist.name)
+                .join(", ") || "Artist Name"}
             </p>
             <p className="text-sm text-primary truncate flex items-center gap-1 cursor-pointer">
               Up Next <ChevronUp />
@@ -50,7 +204,11 @@ const Player = () => {
           <Button variant="ghost" size="icon">
             <SkipBack className="h-5 w-5" />
           </Button>
-          <Button onClick={togglePlay} variant="outline" size="icon">
+          <Button
+            onClick={() => dispatch(togglePlayPause())}
+            variant="outline"
+            size="icon"
+          >
             {isPlaying ? (
               <Pause className="h-5 w-5" />
             ) : (
@@ -68,7 +226,7 @@ const Player = () => {
           <Slider
             className="w-24"
             value={[volume]}
-            onValueChange={(value) => setVolume(value[0])}
+            onValueChange={(value) => dispatch(setVolume(value[0]))}
             max={100}
             step={1}
           />
