@@ -1,9 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { PlaylistCard } from "../playlist-card/PlaylistCard";
-import PlaylistCrousel from "../playlist-crousel/PlaylistCrousel";
-import ArtistsCrousel from "../artists-crousel/ArtistsCrousel";
-import { SongList } from "../song-list/SongList";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -14,7 +10,13 @@ import {
   fetchSongs,
 } from "@/lib/utils";
 import Loader from "../loader/Loader";
-import AlbumsList from "../albums-list/AlbumsList";
+
+// Lazy Load Components
+const SongList = lazy(() => import("../song-list/SongList").then((module) => ({ default: module.SongList })));
+const PlaylistCrousel = lazy(() => import("../playlist-crousel/PlaylistCrousel").then((module) => ({ default: module.default || module.PlaylistCrousel })));
+const ArtistsCrousel = lazy(() => import("../artists-crousel/ArtistsCrousel").then((module) => ({ default: module.default || module.ArtistsCrousel })));
+const AlbumsList = lazy(() => import("../albums-list/AlbumsList").then((module) => ({ default: module.default || module.AlbumsList })));
+
 
 export const SONGS = [
   {
@@ -57,7 +59,7 @@ export const SONGS = [
 
 const HomePage = () => {
   const [playlists, setPlaylists] = useState([]);
-  const [artists, setArtits] = useState([]);
+  const [artists, setArtists] = useState([]);
   const [songs, setSongs] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [isLoadingPlaylists, setIsLoadingPlaylists] = useState(false);
@@ -71,10 +73,11 @@ const HomePage = () => {
     setPlaylists(playlists);
     setIsLoadingPlaylists(false);
   };
+
   const handleFetchArtists = async ({ query, limit }) => {
     setIsLoadingArtists(true);
     const artists = await fetchArtists({ query, limit });
-    setArtits(artists);
+    setArtists(artists);
     setIsLoadingArtists(false);
   };
 
@@ -84,6 +87,7 @@ const HomePage = () => {
     setSongs(songs);
     setIsLoadingSongs(false);
   };
+
   const handleFetchAlbums = async ({ query, limit }) => {
     setIsLoadingAlbums(true);
     const albums = await fetchAlbums({ query, limit });
@@ -98,12 +102,12 @@ const HomePage = () => {
     handleFetchAlbums({ query: "a", limit: 16 });
   }, []);
 
-  console.log(albums)
-
   return (
     <div className="flex flex-col gap-4 p-6 h-full overflow-y-auto">
       <h1 className="text-2xl font-bold">Songs</h1>
-      {isLoadingSongs ? <Loader /> : <SongList songs={songs} grid={true} />}
+      <Suspense fallback={<Loader />}>
+        {isLoadingSongs ? <Loader /> : <SongList songs={songs} grid={true} />}
+      </Suspense>
       <div className="w-full flex items-center justify-center">
         <Link href={"/songs"}>
           <Button
@@ -115,12 +119,15 @@ const HomePage = () => {
           </Button>
         </Link>
       </div>
+
       <h1 className="text-2xl font-bold">Featured Playlists</h1>
-      {isLoadingPlaylists ? (
-        <Loader />
-      ) : (
-        <PlaylistCrousel playlists={playlists} />
-      )}
+      <Suspense fallback={<Loader />}>
+        {isLoadingPlaylists ? (
+          <Loader />
+        ) : (
+          <PlaylistCrousel playlists={playlists} />
+        )}
+      </Suspense>
       <div className="w-full flex items-center justify-center">
         <Link href={"/playlists"}>
           <Button
@@ -132,8 +139,11 @@ const HomePage = () => {
           </Button>
         </Link>
       </div>
+
       <h1 className="text-2xl font-bold">Popular Artists</h1>
-      {isLoadingArtists ? <Loader /> : <ArtistsCrousel artists={artists} />}
+      <Suspense fallback={<Loader />}>
+        {isLoadingArtists ? <Loader /> : <ArtistsCrousel artists={artists} />}
+      </Suspense>
       <div className="w-full flex items-center justify-center">
         <Link href={"/artists"}>
           <Button
@@ -145,8 +155,11 @@ const HomePage = () => {
           </Button>
         </Link>
       </div>
+
       <h1 className="text-2xl font-bold">Popular Albums</h1>
-      {isLoadingAlbums ? <Loader /> : <AlbumsList albums={albums}/>}
+      <Suspense fallback={<Loader />}>
+        {isLoadingAlbums ? <Loader /> : <AlbumsList albums={albums} />}
+      </Suspense>
       <div className="w-full flex items-center justify-center">
         <Link href={"/artists"}>
           <Button

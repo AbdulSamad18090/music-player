@@ -13,19 +13,19 @@ export function SongList({ songs = [], grid = false }) {
     <div
       className={`${
         grid ? "grid grid-cols-1 md:grid-cols-2" : "flex flex-col"
-      } gap-4`}
+      } gap-2`}
     >
       {songs.map((song) => (
         <div
           key={song.id}
-          className="flex items-center justify-between p-4 group rounded-md hover:bg-muted/50 transition-colors"
+          className="flex items-center justify-between p-3 group rounded-md hover:bg-muted/50 transition-colors"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <div className="relative">
               <img
                 src={song.image[song.image.length - 1].url}
                 alt={song.title}
-                className="w-16 h-16 rounded-md object-cover"
+                className="min-w-16 h-16 rounded-md object-cover"
               />
               <Button
                 size="icon"
