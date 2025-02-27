@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Play, Pause, AudioLines } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { playSong, togglePlayPause } from "@/lib/slices/playerSlice";
+import { playSong, setProgress, togglePlayPause } from "@/lib/slices/playerSlice";
 import Image from "next/image";
 
 export function SongList({ songs = [], grid = false }) {
@@ -19,9 +19,12 @@ export function SongList({ songs = [], grid = false }) {
     if (currentSong?.id === song.id) {
       dispatch(togglePlayPause()); // Toggle if the song is already playing
     } else {
-      dispatch(playSong(song)); // Play new song
+      sessionStorage.clear(); // Clear previous state
+      dispatch(playSong({ ...song, progress: 0 })); // Ensure progress is reset
+      dispatch(setProgress(0)); // Reset progress in Redux
     }
   };
+  
 
   return (
     <div
