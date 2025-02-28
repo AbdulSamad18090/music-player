@@ -32,11 +32,10 @@ const page = () => {
     handleFetchPlaylist();
   }, [id]);
 
-  console.log(artist);
   return (
     <div className="flex flex-col gap-4 p-6">
       <Card className="flex items-center gap-4 p-4">
-        <Avatar className="h-16 w-16 sm:h-32 sm:w-32">
+        <Avatar className="h-20 w-20 sm:h-32 sm:w-32">
           <AvatarImage
             src={artist?.image[artist?.image?.length - 1]?.url}
             alt="@shadcn"
@@ -45,7 +44,7 @@ const page = () => {
         </Avatar>
         <div className="flex flex-col justify-center">
           <h1 className="text-xl font-semibold">{artist?.name || "Artist"}</h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             {formatNumber(artist?.followerCount)} Followers
           </p>
           <Badge className={"w-fit mt-1"}>

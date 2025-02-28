@@ -6,8 +6,8 @@ import { decodeHtmlEntities } from "@/lib/utils";
 const AlbumsList = ({ albums }) => {
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-      {albums?.map((album) => (
-        <Link href={`/albums/${album.id}`} key={album.id}>
+      {albums?.map((album, i) => (
+        <Link href={`/albums/${album.id}`} key={i}>
           <Card className="overflow-hidden hover:opacity-75 transition">
             <CardContent className="p-0">
               <div className="aspect-square relative">
