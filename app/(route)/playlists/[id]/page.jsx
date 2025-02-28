@@ -1,7 +1,7 @@
 "use client";
 import Loader from "@/components/loader/Loader";
 import { SongList } from "@/components/song-list/SongList";
-import { fetchPlaylistById } from "@/lib/utils";
+import { decodeHtmlEntities, fetchPlaylistById } from "@/lib/utils";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -14,7 +14,7 @@ const page = () => {
 
   const handleFetchPlaylist = async () => {
     setIsLoadingPlaylist(true);
-    const newPlaylist = await fetchPlaylistById({ id, limit: songsCount});
+    const newPlaylist = await fetchPlaylistById({ id, limit: songsCount });
 
     setPlaylist(newPlaylist); // Append new playlists
     setIsLoadingPlaylist(false);
@@ -24,7 +24,7 @@ const page = () => {
     handleFetchPlaylist();
   }, [id]);
 
-  console.log(playlist)
+  console.log(playlist);
 
   return (
     <div>
@@ -42,8 +42,12 @@ const page = () => {
           </div>
           <div className="p-6 flex flex-col gap-6">
             <div className="sticky top-0 bg-background py-4 z-10">
-              <h1 className="text-lg font-semibold">{playlist?.name}</h1>
-              <p className="text-muted-foreground">{playlist?.description}</p>
+              <h1 className="text-lg font-semibold">
+                {decodeHtmlEntities(playlist?.name)}
+              </h1>
+              <p className="text-muted-foreground">
+                {decodeHtmlEntities(playlist?.description)}
+              </p>
             </div>
 
             <SongList songs={playlist?.songs} grid={true} />

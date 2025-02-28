@@ -8,6 +8,7 @@ import {
   togglePlayPause,
 } from "@/lib/slices/playerSlice";
 import Image from "next/image";
+import { decodeHtmlEntities } from "@/lib/utils";
 
 export function SongList({ songs = [], grid = false }) {
   const dispatch = useDispatch();
@@ -64,9 +65,11 @@ export function SongList({ songs = [], grid = false }) {
               </Button>
             </div>
             <div>
-              <p className="font-medium">{song.name}</p>
-              <p className="text-sm text-muted-foreground space-x-2">
-                {song.artists.primary.map((artist) => artist.name).join(", ")}
+              <p className="font-medium line-clamp-1">{song.name}</p>
+              <p className="text-sm text-muted-foreground space-x-2 line-clamp-2">
+                {song.artists.primary
+                  .map((artist) => decodeHtmlEntities(artist.name))
+                  .join(", ")}
               </p>
             </div>
           </div>

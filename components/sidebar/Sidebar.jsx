@@ -6,6 +6,7 @@ import {
   Users,
   Home,
   GalleryHorizontalEnd,
+  CodeXml
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -39,6 +40,11 @@ const routes = [
     icon: GalleryHorizontalEnd,
     href: "/albums",
   },
+  {
+    label: "Meet the Deveoper",
+    icon: CodeXml,
+    href: "/developer",
+  }
 ];
 
 export function Sidebar() {
