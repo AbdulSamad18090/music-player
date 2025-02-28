@@ -2,17 +2,19 @@
 import Loader from "@/components/loader/Loader";
 import { SongList } from "@/components/song-list/SongList";
 import { fetchPlaylistById } from "@/lib/utils";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
   const { id } = useParams();
   const [playlist, setPlaylist] = useState(null);
   const [isLoadingPlaylist, setIsLoadingPlaylist] = useState();
+  const searchParams = useSearchParams();
+  const songsCount = searchParams.get("songsCount");
 
   const handleFetchPlaylist = async () => {
     setIsLoadingPlaylist(true);
-    const newPlaylist = await fetchPlaylistById({ id });
+    const newPlaylist = await fetchPlaylistById({ id, limit: songsCount});
 
     setPlaylist(newPlaylist); // Append new playlists
     setIsLoadingPlaylist(false);
@@ -21,6 +23,8 @@ const page = () => {
   useEffect(() => {
     handleFetchPlaylist();
   }, [id]);
+
+  console.log(playlist)
 
   return (
     <div>

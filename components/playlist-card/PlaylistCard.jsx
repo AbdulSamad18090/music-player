@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export function PlaylistCard({ playlist }) {
   return (
-    <Link href={`/playlists/${playlist.id}`}>
+    <Link href={`/playlists/${playlist.id}?songsCount=${playlist?.songCount}`}>
       <Card className="overflow-hidden hover:opacity-75 transition">
         <CardContent className="p-0">
           <div className="aspect-square relative">
@@ -17,7 +17,7 @@ export function PlaylistCard({ playlist }) {
           <div className="p-4">
             <h3 className="font-semibold truncate">{playlist.name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">
-              {playlist.songCount} songs
+              {playlist?.songCount} songs
             </p>
           </div>
         </CardContent>
