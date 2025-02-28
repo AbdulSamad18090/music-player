@@ -59,7 +59,6 @@
   }
 } */
 
-
 /* @layer base {
   :root {
     --background: 295 50% 98%;
@@ -116,7 +115,6 @@
     --chart-5: 295 99% 32%;
   }
 } */
-
 
 /* @layer base {
   :root {
@@ -175,7 +173,6 @@
   }
 } */
 
-
 /* @layer base {
   :root {
     --background: 275 69% 99%;
@@ -233,7 +230,6 @@
   }
 } */
 
-
 @layer base {
   :root {
     --background: 166 51% 99%;
@@ -290,7 +286,6 @@
     --chart-5: 166 57% 64%;
   }
 }
-
 
 .scrollbar-hidden {
   scrollbar-width: none;

@@ -5,6 +5,7 @@ import { Search, Music, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ModeToggle } from "../mode-toggler/ModeToggler";
+import CustomThemeSwitcher from "../CustomThemeSwitcher";
 
 const Header = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -41,6 +42,9 @@ const Header = () => {
 
           {/* Mode Toggle */}
           <ModeToggle />
+
+          {/* Custom Theme Switcher */}
+          <CustomThemeSwitcher />
         </div>
       </div>
 
