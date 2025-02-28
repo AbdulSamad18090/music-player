@@ -2,7 +2,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Play, Pause, AudioLines } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { playSong, setProgress, togglePlayPause } from "@/lib/slices/playerSlice";
+import {
+  playSong,
+  setProgress,
+  togglePlayPause,
+} from "@/lib/slices/playerSlice";
 import Image from "next/image";
 
 export function SongList({ songs = [], grid = false }) {
@@ -24,7 +28,6 @@ export function SongList({ songs = [], grid = false }) {
       dispatch(setProgress(0)); // Reset progress in Redux
     }
   };
-  
 
   return (
     <div
@@ -32,9 +35,9 @@ export function SongList({ songs = [], grid = false }) {
         grid ? "grid grid-cols-1 md:grid-cols-2" : "flex flex-col"
       } gap-2`}
     >
-      {songs.map((song) => (
+      {songs.map((song, i) => (
         <div
-          key={song.id}
+          key={i}
           className={`flex items-center justify-between p-3 group rounded-md ${
             currentSong?.id === song.id && "bg-muted/50"
           } hover:bg-muted/50 transition-colors`}
