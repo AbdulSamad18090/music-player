@@ -15,8 +15,8 @@ export function PlaylistCard({ playlist }) {
             />
           </div>
           <div className="p-4">
-            <h3 className="font-semibold truncate">{playlist.name}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">
+            <h3 className="font-semibold truncate line-clamp-1">{playlist.name}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-1">
               {playlist?.songCount} songs
             </p>
           </div>

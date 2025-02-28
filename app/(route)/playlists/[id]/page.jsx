@@ -24,8 +24,6 @@ const page = () => {
     handleFetchPlaylist();
   }, [id]);
 
-  console.log(playlist);
-
   return (
     <div>
       {isLoadingPlaylist || !playlist ? (

@@ -34,6 +34,7 @@ const Page = () => {
 
   return (
     <div className="p-6 flex flex-col gap-6">
+      <h1 className="text-2xl font-bold">Playlists</h1>
       {isLoadingPlaylists && playlists.length === 0 ? (
         <Loader />
       ) : (

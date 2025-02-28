@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { Card, CardContent } from "../ui/card";
+import { decodeHtmlEntities } from "@/lib/utils";
 
 const AlbumsList = ({ albums }) => {
   return (
@@ -17,10 +18,10 @@ const AlbumsList = ({ albums }) => {
                 />
               </div>
               <div className="p-4">
-                <h3 className="font-semibold truncate flex items-center justify-between">
-                  {album.name} <span>{album.year}</span>
+                <h3 className="font-semibold truncate line-clamp-1 flex items-center justify-between">
+                  {decodeHtmlEntities(album.name)} <span>{album.year}</span>
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
+                <p className="text-sm text-muted-foreground line-clamp-1">
                   {album.artists.primary
                     .map((artist) => artist.name)
                     .join(", ")}
