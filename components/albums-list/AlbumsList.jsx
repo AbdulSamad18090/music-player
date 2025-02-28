@@ -5,7 +5,7 @@ import { Card, CardContent } from "../ui/card";
 const AlbumsList = ({ albums }) => {
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-      {albums.map((album) => (
+      {albums?.map((album) => (
         <Link href={`/albums/${album.id}`} key={album.id}>
           <Card className="overflow-hidden hover:opacity-75 transition">
             <CardContent className="p-0">
