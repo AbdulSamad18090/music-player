@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            <CustomThemeProvider defaultTheme="sea-green">
+            <CustomThemeProvider defaultTheme="default">
               <div className="flex flex-col h-dvh">
                 <Header />
                 <ResizablePanelGroup

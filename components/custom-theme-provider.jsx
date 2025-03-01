@@ -5,12 +5,12 @@ import themeConfig from "@/lib/theme/theme-config.json";
 import { useTheme as DefaultUseTheme } from "next-themes";
 
 const ThemeContext = createContext({
-  theme: "sea-green",
+  theme: "default",
   setTheme: () => null,
   themes: themeConfig.themes,
 });
 
-export function CustomThemeProvider({ children, defaultTheme = "sea-green" }) {
+export function CustomThemeProvider({ children, defaultTheme = "default" }) {
   const [theme, setTheme] = useState(defaultTheme);
   const [mounted, setMounted] = useState(false);
 
