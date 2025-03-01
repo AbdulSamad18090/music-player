@@ -5,6 +5,8 @@ import {
   togglePlayPause,
   setVolume,
   setProgress,
+  nextSong,
+  previousSong,
 } from "@/lib/slices/playerSlice";
 import {
   Play,
@@ -32,9 +34,8 @@ import Loader from "../loader/Loader";
 
 const Player = () => {
   const dispatch = useDispatch();
-  const { currentSong, isPlaying, volume, progress } = useSelector(
-    (state) => state.player
-  );
+  const { currentSong, isPlaying, volume, progress, queue, queueIndex } =
+    useSelector((state) => state.player);
   const audioRef = useRef(null);
   const animationRef = useRef(null);
   const [localProgress, setLocalProgress] = useState(progress);
@@ -134,10 +135,35 @@ const Player = () => {
     dispatch(setProgress(value[0]));
   };
 
-  // Handle song ending
+  // Handle song ending - play next song
   const handleSongEnd = () => {
     dispatch(setProgress(0));
-    dispatch(togglePlayPause());
+    // If we have more songs in the queue, play the next one
+    if (queue.length > 1) {
+      dispatch(nextSong());
+    } else {
+      // If we don't have more songs, just stop playing
+      dispatch(togglePlayPause());
+    }
+  };
+
+  // Handle next song button click
+  const handleNextSong = () => {
+    dispatch(setProgress(0));
+    dispatch(nextSong());
+  };
+
+  // Handle previous song button click
+  const handlePreviousSong = () => {
+    // If we're more than 3 seconds into the song, go back to the start of the current song
+    if (audioRef.current && audioRef.current.currentTime > 3) {
+      audioRef.current.currentTime = 0;
+      dispatch(setProgress(0));
+    } else {
+      // Otherwise go to the previous song
+      dispatch(setProgress(0));
+      dispatch(previousSong());
+    }
   };
 
   // Save state in sessionStorage whenever it changes
@@ -145,10 +171,17 @@ const Player = () => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem(
         "playerState",
-        JSON.stringify({ currentSong, isPlaying, volume, progress })
+        JSON.stringify({
+          currentSong,
+          isPlaying,
+          volume,
+          progress,
+          queue,
+          queueIndex,
+        })
       );
     }
-  }, [currentSong, isPlaying, volume, progress]);
+  }, [currentSong, isPlaying, volume, progress, queue, queueIndex]);
 
   // Load the stored progress when the song starts playing
   useEffect(() => {
@@ -179,6 +212,9 @@ const Player = () => {
       }
     }
   }, [currentSong]);
+
+  // Check if next/prev buttons should be disabled
+  const isQueueEmpty = !queue || queue.length === 0;
 
   return (
     <div className="relative w-full bg-background p-3 border-t flex flex-col">
@@ -271,13 +307,19 @@ const Player = () => {
 
         {/* Center: Playback Controls */}
         <div className="flex items-center gap-4 flex-1 justify-center">
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handlePreviousSong}
+            disabled={isQueueEmpty}
+          >
             <SkipBack className="h-5 w-5" />
           </Button>
           <Button
             onClick={() => dispatch(togglePlayPause())}
             variant="outline"
             size="icon"
+            disabled={!currentSong}
           >
             {isPlaying ? (
               <Pause className="h-5 w-5" />
@@ -285,7 +327,12 @@ const Player = () => {
               <Play className="h-5 w-5" />
             )}
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleNextSong}
+            disabled={isQueueEmpty}
+          >
             <SkipForward className="h-5 w-5" />
           </Button>
         </div>

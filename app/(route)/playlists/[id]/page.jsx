@@ -1,16 +1,27 @@
 "use client";
 import Loader from "@/components/loader/Loader";
 import { SongList } from "@/components/song-list/SongList";
+import { Button } from "@/components/ui/button";
+import {
+  addToQueue,
+  playSong,
+  togglePlayPause,
+} from "@/lib/slices/playerSlice";
 import { decodeHtmlEntities, fetchPlaylistById } from "@/lib/utils";
+import { Pause, Play } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const page = () => {
   const { id } = useParams();
   const [playlist, setPlaylist] = useState(null);
-  const [isLoadingPlaylist, setIsLoadingPlaylist] = useState();
+  const [isLoadingPlaylist, setIsLoadingPlaylist] = useState(false);
   const searchParams = useSearchParams();
   const songsCount = searchParams.get("songsCount");
+  const dispatch = useDispatch();
+
+  const { currentSong, isPlaying } = useSelector((state) => state.player);
 
   const handleFetchPlaylist = async () => {
     setIsLoadingPlaylist(true);
@@ -18,6 +29,16 @@ const page = () => {
 
     setPlaylist(newPlaylist); // Append new playlists
     setIsLoadingPlaylist(false);
+  };
+
+  const handlePlayPausePlaylist = () => {
+    if (!currentSong) {
+      dispatch(playSong(playlist?.songs[0]));
+      playlist?.songs?.forEach((song) => dispatch(addToQueue(song)));
+      dispatch(togglePlayPause());
+    } else {
+      dispatch(togglePlayPause());
+    }
   };
 
   useEffect(() => {
@@ -37,6 +58,13 @@ const page = () => {
               className="w-full h-44 object-cover object-top"
             />
             <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-background to-transparent z-50"></div>
+            <Button
+              size="icon"
+              className="absolute -bottom-4 right-10 rounded-full z-50 w-14 h-14"
+              onClick={handlePlayPausePlaylist}
+            >
+              {isPlaying ? <Pause /> : <Play />}
+            </Button>
           </div>
           <div className="p-6 flex flex-col gap-6">
             <div className="sticky top-0 bg-background py-4 z-10">

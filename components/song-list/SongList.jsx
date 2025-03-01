@@ -6,13 +6,16 @@ import {
   playSong,
   setProgress,
   togglePlayPause,
+  addToQueue,
+  clearQueue,
 } from "@/lib/slices/playerSlice";
-import Image from "next/image";
 import { decodeHtmlEntities } from "@/lib/utils";
 
 export function SongList({ songs = [], grid = false }) {
   const dispatch = useDispatch();
-  const { currentSong, isPlaying } = useSelector((state) => state.player);
+  const { currentSong, isPlaying, queue } = useSelector(
+    (state) => state.player
+  );
 
   const formatDuration = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -20,12 +23,29 @@ export function SongList({ songs = [], grid = false }) {
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
-  const handlePlayPause = (song) => {
+  const handlePlayPause = (song, index) => {
     if (currentSong?.id === song.id) {
       dispatch(togglePlayPause()); // Toggle if the song is already playing
     } else {
-      sessionStorage.clear(); // Clear previous state
-      dispatch(playSong({ ...song, progress: 0 })); // Ensure progress is reset
+      // Check if our songs array is the same as the current queue
+      const isSameQueue =
+        queue.length === songs.length &&
+        songs.every((s, i) => s.id === queue[i]?.id);
+
+      if (!isSameQueue) {
+        // If we're playing from a different list, rebuild the queue
+        dispatch(clearQueue());
+        // Add all songs to the queue
+        const songsQueue = [...songs];
+        // Dispatch the playSong action with the queue and current index
+        dispatch(playSong({ queue: songsQueue, index }));
+      } else {
+        // If we're in the same queue, just jump to the song
+        const songIndex = queue.findIndex((s) => s.id === song.id);
+        if (songIndex !== -1) {
+          dispatch(playSong({ queue, index: songIndex }));
+        }
+      }
       dispatch(setProgress(0)); // Reset progress in Redux
     }
   };
@@ -55,7 +75,7 @@ export function SongList({ songs = [], grid = false }) {
                 className={`absolute inset-0 m-auto opacity-0 ${
                   currentSong?.id === song.id && "opacity-100"
                 } group-hover:opacity-100 transition-opacity`}
-                onClick={() => handlePlayPause(song)}
+                onClick={() => handlePlayPause(song, i)}
               >
                 {currentSong?.id === song.id && isPlaying ? (
                   <Pause className="h-5 w-5" />
