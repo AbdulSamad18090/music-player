@@ -25,11 +25,11 @@ const page = () => {
   const { currentSong, isPlaying } = useSelector((state) => state.player);
 
   const handleFetchPlaylist = async () => {
-    setIsLoadingPlaylist(true);
-    const newPlaylist = await fetchPlaylistById({ id, limit: songsCount });
+    // setIsLoadingPlaylist(true);
+    // const newPlaylist = await fetchPlaylistById({ id, limit: songsCount });
 
-    setPlaylist(newPlaylist); // Append new playlists
-    setIsLoadingPlaylist(false);
+    // setPlaylist(newPlaylist); // Append new playlists
+    // setIsLoadingPlaylist(false);
   };
 
   const handlePlayPausePlaylist = () => {
@@ -57,13 +57,13 @@ const page = () => {
               className="w-full h-44 object-cover object-top"
             />
             <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-background to-transparent z-50"></div>
-            <Button
+            {/* <Button
               size="icon"
               className="absolute -bottom-4 right-10 rounded-full z-50 w-14 h-14"
               onClick={handlePlayPausePlaylist}
             >
               {isPlaying ? <Pause /> : <Play />}
-            </Button>
+            </Button> */}
           </div>
           <div className="p-6 flex flex-col gap-6">
             <div className="sticky top-0 bg-background py-4 z-10">
