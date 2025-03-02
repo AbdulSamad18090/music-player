@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   addToQueue,
   playSong,
+  setProgress,
   togglePlayPause,
 } from "@/lib/slices/playerSlice";
 import { decodeHtmlEntities, fetchPlaylistById } from "@/lib/utils";
@@ -32,11 +33,9 @@ const page = () => {
   };
 
   const handlePlayPausePlaylist = () => {
-    if (!currentSong) {
-      dispatch(playSong(playlist?.songs[0]));
-      playlist?.songs?.forEach((song) => dispatch(addToQueue(song)));
-      dispatch(togglePlayPause());
-    } else {
+    dispatch(setProgress(0));
+    dispatch(playSong(playlist?.songs[0]));
+    if (isPlaying) {
       dispatch(togglePlayPause());
     }
   };
