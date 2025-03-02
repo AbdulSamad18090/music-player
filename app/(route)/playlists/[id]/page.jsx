@@ -3,7 +3,6 @@ import Loader from "@/components/loader/Loader";
 import { SongList } from "@/components/song-list/SongList";
 import { Button } from "@/components/ui/button";
 import {
-  addToQueue,
   playSong,
   setProgress,
   togglePlayPause,
@@ -20,25 +19,27 @@ const page = () => {
   const [isLoadingPlaylist, setIsLoadingPlaylist] = useState(false);
   const searchParams = useSearchParams();
   const songsCount = searchParams.get("songsCount");
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const { currentSong, isPlaying } = useSelector((state) => state.player);
+  // const { currentSong, isPlaying } = useSelector((state) => state.player);
 
   const handleFetchPlaylist = async () => {
-    // setIsLoadingPlaylist(true);
-    // const newPlaylist = await fetchPlaylistById({ id, limit: songsCount });
+    setIsLoadingPlaylist(true);
+    const newPlaylist = await fetchPlaylistById({ id, limit: songsCount });
 
-    // setPlaylist(newPlaylist); // Append new playlists
-    // setIsLoadingPlaylist(false);
+    setPlaylist(newPlaylist); // Append new playlists
+    setIsLoadingPlaylist(false);
   };
 
-  const handlePlayPausePlaylist = () => {
-    dispatch(setProgress(0));
-    dispatch(playSong(playlist?.songs[0]));
-    if (isPlaying) {
-      dispatch(togglePlayPause());
-    }
-  };
+  // const handlePlayPausePlaylist = () => {
+  //   dispatch(setProgress(0));
+  //   dispatch(playSong(playlist?.songs[0]));
+  //   dispatch(playSong({ queue: songsQueue, index }));
+  //   dispatch(togglePlayPause());
+  //   if (isPlaying) {
+  //     dispatch(togglePlayPause());
+  //   }
+  // };
 
   useEffect(() => {
     handleFetchPlaylist();
