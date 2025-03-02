@@ -10,6 +10,7 @@ import {
   fetchSongs,
 } from "@/lib/utils";
 import Loader from "../loader/Loader";
+import BannerSlider from "../banner-slider/BannerSlider";
 
 // Lazy Load Components
 const SongList = lazy(() =>
@@ -81,38 +82,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col gap-4 p-6 h-full overflow-y-auto">
-      <section className="relative overflow-hidden rounded-xl bg-foreground p-6 text-background">
-        <div className="relative z-10 max-w-3xl">
-          <h1 className="mb-2 text-3xl font-bold md:text-4xl">
-            Welcome to Musix
-          </h1>
-          <p className="text-lg opacity-90">
-            Discover the best music all in one place
-          </p>
-        </div>
-
-        {/* Decorative SVG Icon */}
-        <div className="absolute -right-10 -bottom-10 opacity-20">
-          <svg
-            width="300"
-            height="300"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
-              fill="currentColor"
-            />
-            <path
-              d="M19 12C19 13.1046 18.1046 14 17 14C15.8954 14 15 13.1046 15 12C15 10.8954 15.8954 10 17 10C18.1046 10 19 10.8954 19 12Z"
-              fill="currentColor"
-            />
-            <path d="M9 19V5L19 12V19" stroke="currentColor" strokeWidth="2" />
-          </svg>
-        </div>
-      </section>
-
+      <BannerSlider />
       <h1 className="text-2xl font-bold">Songs</h1>
       <Suspense fallback={<Loader />}>
         {isLoadingSongs ? <Loader /> : <SongList songs={songs} grid={true} />}
