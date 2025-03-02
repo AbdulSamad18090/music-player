@@ -16,7 +16,7 @@ const CustomThemeSwitcher = () => {
 
   return (
     <Select value={theme} onValueChange={setTheme}>
-      <SelectTrigger className="w-32">
+      <SelectTrigger className="w-28">
         <SelectValue placeholder="Select Theme" />
       </SelectTrigger>
       <SelectContent>
