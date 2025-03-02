@@ -15,8 +15,8 @@ const Page = () => {
   const handleFetchAlbums = async (query) => {
     setIsLoadingAlbums(true);
     const newAlbums = await fetchAlbums({ query, limit });
-
-    setAlbums((prevAlbums) => [...prevAlbums, ...newAlbums]); // Append new playlists
+    const results = newAlbums?.data?.results;
+    setAlbums((prevAlbums) => [...prevAlbums, ...results]); // Append new playlists
     setIsLoadingAlbums(false);
   };
 

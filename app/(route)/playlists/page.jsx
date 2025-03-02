@@ -15,8 +15,8 @@ const Page = () => {
   const handleFetchPlaylists = async (query) => {
     setIsLoadingPlaylists(true);
     const newPlaylists = await fetchPlaylists({ query, limit });
-
-    setPlaylists((prevPlaylists) => [...prevPlaylists, ...newPlaylists]); // Append new playlists
+    const results = newPlaylists?.data?.results;
+    setPlaylists((prevPlaylists) => [...prevPlaylists, ...results]); // Append new playlists
     setIsLoadingPlaylists(false);
   };
 

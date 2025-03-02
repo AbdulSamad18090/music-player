@@ -46,28 +46,29 @@ const HomePage = () => {
   const handleFetchPlaylists = async ({ query, limit }) => {
     setIsLoadingPlaylists(true);
     const playlists = await fetchPlaylists({ query, limit });
-    setPlaylists(playlists);
+    console.log(playlists);
+    setPlaylists(playlists?.data?.results);
     setIsLoadingPlaylists(false);
   };
 
   const handleFetchArtists = async ({ query, limit }) => {
     setIsLoadingArtists(true);
     const artists = await fetchArtists({ query, limit });
-    setArtists(artists);
+    setArtists(artists?.data?.results);
     setIsLoadingArtists(false);
   };
 
   const handleFetchSongs = async ({ query, limit }) => {
     setIsLoadingSongs(true);
     const songs = await fetchSongs({ query, limit });
-    setSongs(songs);
+    setSongs(songs?.data?.results);
     setIsLoadingSongs(false);
   };
 
   const handleFetchAlbums = async ({ query, limit }) => {
     setIsLoadingAlbums(true);
     const albums = await fetchAlbums({ query, limit });
-    setAlbums(albums);
+    setAlbums(albums?.data?.results);
     setIsLoadingAlbums(false);
   };
 

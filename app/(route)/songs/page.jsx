@@ -14,8 +14,8 @@ const Page = () => {
   const handleFetchSongs = async (query) => {
     setIsLoadingSongs(true);
     const newSongs = await fetchSongs({ query, limit });
-
-    setSongs((prevSongs) => [...prevSongs, ...newSongs]); // Append new songs
+    const results = newSongs?.data?.results;
+    setSongs((prevSongs) => [...prevSongs, ...results]); // Append new songs
     setIsLoadingSongs(false);
   };
 

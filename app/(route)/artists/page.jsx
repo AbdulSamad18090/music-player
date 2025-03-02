@@ -16,8 +16,8 @@ const Page = () => {
   const handleFetchArtists = async (query) => {
     setIsLoadingArtists(true);
     const newArtists = await fetchArtists({ query, limit });
-
-    setArtists((prevArtists) => [...prevArtists, ...newArtists]); // Append new artists
+    const results = newArtists?.data?.results;
+    setArtists((prevArtists) => [...prevArtists, ...results]); // Append new artists
     setIsLoadingArtists(false);
   };
 

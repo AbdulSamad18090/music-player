@@ -11,6 +11,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import StoreProvider from "@/components/store-provider/StoreProvider";
 import { CustomThemeProvider } from "@/components/custom-theme-provider";
+import ServiceWorker from "@/components/ServiceWorker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,6 +73,7 @@ export default function RootLayout({ children }) {
             </CustomThemeProvider>
           </ThemeProvider>
         </StoreProvider>
+        <ServiceWorker/>
       </body>
     </html>
   );
